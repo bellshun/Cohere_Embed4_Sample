@@ -2,7 +2,7 @@ import os
 import numpy as np
 import cohere
 import google.generativeai as genai
-from qdrant_client import QdrantClient
+from qdrant_client import QdrantClient, models
 from PIL import Image
 from dotenv import load_dotenv
 
@@ -29,10 +29,18 @@ def embed_question(text):
 
 def search_similar(query, top_k=3):
     """類似検索を実行"""
+    # 高精度検索パラメータを設定  
+    search_params = models.SearchParams(  
+        exact=True,  # 正確な検索を有効  
+        quantization=models.QuantizationSearchParams(ignore=True),  # 量子化を無効  
+        indexed_only=False  # 全てのベクトルを検索対象に  
+    )  
+
     query_vec = embed_question(query)
     result = client.query_points(
         collection_name=COLLECTION_NAME,
         query=query_vec.tolist(),
+        search_params=search_params,
         limit=top_k
     )
     return result.points

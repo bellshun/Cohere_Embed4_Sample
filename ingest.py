@@ -175,6 +175,8 @@ class DocumentIndexer:
         client.create_collection(
             collection_name=COLLECTION_NAME,
             vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE),
+            # 量子化を無効にして精度を最大化  
+            quantization_config=None  
         )
         
         # ファイル処理

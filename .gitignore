@@ -11,4 +11,6 @@ wheels/
 .env
 
 qdrant_data
-data
+
+data/*
+!data/.gitkeep
